@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +31,14 @@ public class GrupoSocial {
     @Column(name = "nivel_importancia", nullable = false)
     @Enumerated(EnumType.STRING)
     private NivelImportancia nivelImportancia;
+
+    @CreationTimestamp
+    @Column(name = "data_criacao", nullable = false, columnDefinition = "datetime")
+    private OffsetDateTime dataCriacao;
+
+    @UpdateTimestamp
+    @Column(name = "data_ultima_atualizacao", nullable = false, columnDefinition = "datetime")
+    private OffsetDateTime dataUltimaAtualizacao;
 
     @ManyToMany(mappedBy = "gruposSociais")
     private Set<Pessoa> pessoas = new HashSet<>();

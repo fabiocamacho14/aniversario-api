@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.OffsetDateTime;
 import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,10 +30,10 @@ public class Pessoa {
     @Lob
     private String descricao;
 
-    @Column(name = "idade", nullable = false, insertable = false)
+    @Column(name = "idade", nullable = false)
     private Integer idade;
 
-    @Column(name = "proximo_aniversario_em", nullable = false, insertable = false)
+    @Column(name = "proximo_aniversario_em", nullable = false)
     private Period proximoAniversario;
 
     @Column(name = "falecido", nullable = false)
@@ -46,6 +49,14 @@ public class Pessoa {
     @Column(name = "sexo", nullable = false)
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
+
+    @CreationTimestamp
+    @Column(name = "data_criacao", nullable = false, columnDefinition = "datetime")
+    private OffsetDateTime dataCriacao;
+
+    @UpdateTimestamp
+    @Column(name = "data_ultima_atualizacao", nullable = false, columnDefinition = "datetime")
+    private OffsetDateTime dataUltimaAtualizacao;
 
 //    Relacionamentos
     @OneToOne(mappedBy = "pessoa")
