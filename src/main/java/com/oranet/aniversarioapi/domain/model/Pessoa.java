@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
-import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,18 +32,11 @@ public class Pessoa {
     @Column(name = "idade", nullable = false)
     private Integer idade;
 
-    @Column(name = "proximo_aniversario_em", nullable = false)
-    private Period proximoAniversario;
-
     @Column(name = "falecido", nullable = false)
     private Boolean isFalecido = Boolean.FALSE;
 
     @Column(name = "maior_de_idade", nullable = false)
     private Boolean isMaiorDeIdade;
-
-    @Column(name = "desejo")
-    @Lob
-    private String desejo;
 
     @Column(name = "sexo", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -58,12 +50,11 @@ public class Pessoa {
     @Column(name = "data_ultima_atualizacao", nullable = false, columnDefinition = "datetime")
     private OffsetDateTime dataUltimaAtualizacao;
 
-//    Relacionamentos
-    @OneToOne(mappedBy = "pessoa")
+    //    Relacionamentos
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @JoinColumn(name = "aniversario_id", nullable = false, unique = true, foreignKey = @ForeignKey(name = "FK_PESSOA_ANIVERSARIO"))
+    @MapsId
     private Aniversario aniversario;
-
-    @OneToOne(mappedBy = "pessoa")
-    private Falecido falecido;
 
     @ManyToMany
     @JoinTable(name = "pessoa_grupos_sociais",

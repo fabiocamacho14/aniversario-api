@@ -7,7 +7,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.Period;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -23,10 +25,12 @@ public class Aniversario {
     @Column(name = "DATA_ANIVERSARIO", columnDefinition = "datetime")
     private OffsetDateTime dataAniversario;
 
-    @MapsId
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "pessoa_id", nullable = false, unique = true, foreignKey = @ForeignKey(name = "FK_ANIVERSARIO_PESSOA"))
-    private Pessoa pessoa;
+    @Column(name = "desejo")
+    @Lob
+    private String desejo;
+
+    @Column(name = "proximo_aniversario_em", nullable = false)
+    private Period proximoAniversario;
 
     @CreationTimestamp
     @Column(name = "data_criacao", nullable = false, columnDefinition = "datetime")
@@ -35,4 +39,8 @@ public class Aniversario {
     @UpdateTimestamp
     @Column(name = "data_ultima_atualizacao", nullable = false, columnDefinition = "datetime")
     private OffsetDateTime dataUltimaAtualizacao;
+
+    public Boolean fezAniversarioEsseAno() {
+        return dataAniversario.toLocalDate().isBefore(LocalDate.now());
+    }
 }

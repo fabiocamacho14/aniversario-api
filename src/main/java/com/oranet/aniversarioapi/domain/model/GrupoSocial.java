@@ -39,7 +39,4 @@ public class GrupoSocial {
     @UpdateTimestamp
     @Column(name = "data_ultima_atualizacao", nullable = false, columnDefinition = "datetime")
     private OffsetDateTime dataUltimaAtualizacao;
-
-    @ManyToMany(mappedBy = "gruposSociais")
-    private Set<Pessoa> pessoas = new HashSet<>();
 }

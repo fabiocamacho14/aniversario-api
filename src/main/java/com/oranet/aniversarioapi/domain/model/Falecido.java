@@ -31,7 +31,8 @@ public class Falecido {
     //    Relacionamentos
     @MapsId
     @OneToOne(orphanRemoval = true, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "pessoa_id", nullable = false, unique = true, foreignKey = @ForeignKey(name = "FK_FALECIDO_PESSOA"))
+    @JoinColumn(name = "pessoa_id", nullable = false, unique = true, foreignKey =
+    @ForeignKey(name = "FK_FALECIDO_PESSOA", foreignKeyDefinition = "FOREIGN KEY (pessoa_id) REFERENCES Pessoa(aniversario_id)"))
     private Pessoa pessoa;
 }
 
