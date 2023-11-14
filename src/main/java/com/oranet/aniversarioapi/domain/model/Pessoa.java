@@ -56,7 +56,7 @@ public class Pessoa {
     @MapsId
     private Aniversario aniversario;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "pessoa_grupos_sociais",
                     joinColumns = @JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(name = "FK_PESSOA_GRUPOS_SOCIAIS_PESSOA")),
                     inverseJoinColumns = @JoinColumn(name = "grupo_social_id", nullable = false, foreignKey = @ForeignKey(name = "FK_GRUPOS_SOCIAIS_GRUPO_SOCIAL")))

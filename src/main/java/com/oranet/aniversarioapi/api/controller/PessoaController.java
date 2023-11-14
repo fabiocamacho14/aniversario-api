@@ -1,5 +1,7 @@
 package com.oranet.aniversarioapi.api.controller;
 
+import com.oranet.aniversarioapi.api.assembler.PessoaModelAssembler;
+import com.oranet.aniversarioapi.api.model.PessoaModel;
 import com.oranet.aniversarioapi.domain.model.Pessoa;
 import com.oranet.aniversarioapi.domain.repository.PessoaRepository;
 import com.oranet.aniversarioapi.domain.service.CadastroPessoaService;
@@ -19,23 +21,27 @@ public class PessoaController {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private PessoaModelAssembler pessoaModelAssembler;
+
     @GetMapping("/{pessoaId}")
-    public Pessoa buscar(@PathVariable Long pessoaId) {
-        return cadastroPessoa.buscarOuFalhar(pessoaId);
+    public PessoaModel buscar(@PathVariable Long pessoaId) {
+        return pessoaModelAssembler.toModel(cadastroPessoa.buscarOuFalhar(pessoaId));
     }
 
     @GetMapping()
-    public List<Pessoa> listar() {
-        return pessoaRepository.findAll();
+    public List<PessoaModel> listar() {
+        return pessoaModelAssembler.toCollectionModel(pessoaRepository.findAll());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pessoa adicionar(@RequestBody Pessoa pessoa) {
-        return cadastroPessoa.adicionar(pessoa);
+    public PessoaModel adicionar(@RequestBody Pessoa pessoa) {
+        return pessoaModelAssembler.toModel(cadastroPessoa.adicionar(pessoa));
     }
 
     @DeleteMapping("/{pessoaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long pessoaId) {
         cadastroPessoa.remover(pessoaId);
     }
