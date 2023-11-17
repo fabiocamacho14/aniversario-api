@@ -18,9 +18,6 @@ public class CadastroPessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    @Autowired
-    private AniversarioRepository aniversarioRepository;
-
     @Transactional
     public Pessoa adicionar(Pessoa pessoa) {
         Aniversario aniversario = pessoa.getAniversario();

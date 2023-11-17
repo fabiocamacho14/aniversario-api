@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.empty;
+
 
 @Repository
 public class PessoaRepositoryImpl implements PessoaRepositoryCustom {
@@ -35,7 +37,12 @@ public class PessoaRepositoryImpl implements PessoaRepositoryCustom {
         );
 
         TypedQuery<Pessoa> typedQuery = entityManager.createQuery(criteriaQuery);
-        return Optional.of(typedQuery.getSingleResult());
+        try {
+            return Optional.ofNullable(typedQuery.getSingleResult());
+        } catch (Exception e) {
+            Optional<Pessoa> result = Optional.empty();
+            return result;
+        }
     }
 
     @Override
