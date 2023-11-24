@@ -1,4 +1,4 @@
-package com.oranet.aniversarioapi.api.model;
+package com.oranet.aniversarioapi.api.model.view;
 
 import lombok.Getter;
 import lombok.Setter;

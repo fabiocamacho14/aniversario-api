@@ -1,4 +1,4 @@
-package com.oranet.aniversarioapi.api.model;
+package com.oranet.aniversarioapi.api.model.view;
 
 import com.oranet.aniversarioapi.domain.model.GrupoSocial;
 import com.oranet.aniversarioapi.domain.model.Sexo;

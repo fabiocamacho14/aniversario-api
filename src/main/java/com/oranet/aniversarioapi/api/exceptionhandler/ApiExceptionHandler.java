@@ -5,13 +5,18 @@ import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.oranet.aniversarioapi.domain.exception.EntidadeNaoEncontradaException;
-import com.oranet.aniversarioapi.domain.exception.PessoaNaoEncontradaException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -27,11 +32,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // TODO Implementar exceptions
-    // TODO Implementar beans
-    // TODO Implementar UUID
-    // TODO Gerar um relatório com jasper
-    // TODO Gerar testes de integração
+    @Autowired
+    private MessageSource messageSource;
 
     public static final String MSG_ERRO_SISTEMA = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o problema persistir" +
             ", entre em contato com o administrador do sistema.";
@@ -118,10 +120,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleExceptionQualquer(Exception ex, WebRequest request) {
 
-        String detail = MSG_ERRO_SISTEMA;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        Problem problem = createProblemBuilder(status, problemType, detail, LocalDateTime.now()).build();
+        Problem problem = createProblemBuilder(status, problemType, MSG_ERRO_SISTEMA, LocalDateTime.now()).build();
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
@@ -144,6 +145,37 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        return handleExceptionInternal(ex, getProblem(ex.getBindingResult()), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    private Problem getProblem(BindingResult bindingResult) {
+        String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+        HttpStatus statusBad = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        List<Problem.Object> problemObjects = bindingResult.getAllErrors()
+                .stream()
+                .map(error -> {
+                    String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
+                    String name = error.getObjectName();
+
+                    if (error instanceof FieldError) {
+                        name = ((FieldError) error).getField();
+                    }
+
+                    return Problem.Object.builder()
+                            .name(name)
+                            .userMessage(message)
+                            .build();
+                }).toList();
+
+        return createProblemBuilder(statusBad, problemType, detail, LocalDateTime.now())
+                .userMessage(MSG_ERRO_SISTEMA)
+                .objects(problemObjects)
+                .build();
     }
 
     @Override

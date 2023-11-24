@@ -1,6 +1,6 @@
 package com.oranet.aniversarioapi.api.assembler;
 
-import com.oranet.aniversarioapi.api.model.PessoaModel;
+import com.oranet.aniversarioapi.api.model.view.PessoaModel;
 import com.oranet.aniversarioapi.domain.model.Pessoa;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
