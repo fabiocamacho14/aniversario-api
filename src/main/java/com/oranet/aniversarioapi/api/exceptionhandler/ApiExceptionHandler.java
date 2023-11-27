@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.oranet.aniversarioapi.domain.exception.EntidadeNaoEncontradaException;
+import com.oranet.aniversarioapi.domain.exception.NegocioException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -133,7 +134,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = ex.getMessage();
         Problem problem = createProblemBuilder(httpStatus, problemType, detail, LocalDateTime.now()).build();
 
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.MULTI_STATUS, request);
+        return handleExceptionInternal(ex, problem, new HttpHeaders(),httpStatus, request);
     }
 
     @Override
@@ -176,6 +177,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .userMessage(MSG_ERRO_SISTEMA)
                 .objects(problemObjects)
                 .build();
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String detail = ex.getMessage();
+        ProblemType problemType = ProblemType.NEGOCIO_EXCEPTION;
+
+        Problem problem = createProblemBuilder(status, problemType, detail, LocalDateTime.now()).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @Override
