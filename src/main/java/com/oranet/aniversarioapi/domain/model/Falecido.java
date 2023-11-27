@@ -1,5 +1,6 @@
 package com.oranet.aniversarioapi.domain.model;
 
+import com.oranet.aniversarioapi.domain.model.converter.PeriodConverter;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,7 +23,8 @@ public class Falecido {
     @Column(name = "data_falecimento", nullable = false, columnDefinition = "datetime")
     private OffsetDateTime dataFalecimento;
 
-    @Column(name = "periodo_falecimento", nullable = false, columnDefinition = "datetime")
+    @Column(name = "periodo_falecimento", nullable = false)
+    @Convert(converter = PeriodConverter.class)
     private Period periodoFalecimento;
 
     @Column(name = "idade_que_faleceu", nullable = false)

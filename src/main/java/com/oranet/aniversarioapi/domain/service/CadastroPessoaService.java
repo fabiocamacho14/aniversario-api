@@ -5,7 +5,6 @@ import com.oranet.aniversarioapi.domain.exception.PessoaNaoEncontradaException;
 import com.oranet.aniversarioapi.domain.model.Aniversario;
 import com.oranet.aniversarioapi.domain.model.GrupoSocial;
 import com.oranet.aniversarioapi.domain.model.Pessoa;
-import com.oranet.aniversarioapi.domain.repository.AniversarioRepository;
 import com.oranet.aniversarioapi.domain.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashSet;
 
 @Service
 public class CadastroPessoaService {
@@ -44,15 +44,27 @@ public class CadastroPessoaService {
         LocalDate proximoAniversario;
 
         if (!aniversario.fezAniversarioEsseAno()) {
-            proximoAniversario = LocalDate.now();
+            proximoAniversario = LocalDate.of(
+                    (LocalDate.now().getYear()),
+                    aniversario.getDataAniversario().getMonth(),
+                    aniversario.getDataAniversario().getDayOfMonth()
+            );
         } else {
-            proximoAniversario = LocalDate.now().plusYears(1);
+            proximoAniversario = LocalDate.of(
+                    (LocalDate.now().getYear() + 1),
+                    aniversario.getDataAniversario().getMonth(),
+                    aniversario.getDataAniversario().getDayOfMonth()
+            );
         }
+
+//        System.out.println(proximoAniversario.toString());
 
         Period periodParaProximoAniversario = Period.between(
                 LocalDate.now(),
                 proximoAniversario
         );
+
+        pessoa.setGruposSociais(new HashSet<>());
 
         aniversario.setProximoAniversario(periodParaProximoAniversario);
         pessoa.setAniversario(aniversario);

@@ -8,7 +8,7 @@ public class AniversarioApiApplication {
 
     // TODO Implementar UUID
     // TODO Gerar um relatório com jasper
-    // TODO Gerar testes de integração
+    // TODO Gerar testes de integração e testes no geral
     // TODO Colocar converter em alguns campos
 
     public static void main(String[] args) {

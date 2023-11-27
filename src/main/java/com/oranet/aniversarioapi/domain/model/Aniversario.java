@@ -1,5 +1,6 @@
 package com.oranet.aniversarioapi.domain.model;
 
+import com.oranet.aniversarioapi.domain.model.converter.PeriodConverter;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Aniversario {
     private String desejo;
 
     @Column(name = "proximo_aniversario_em", nullable = false)
+    @Convert(converter = PeriodConverter.class)
     private Period proximoAniversario;
 
     @CreationTimestamp
@@ -41,6 +43,11 @@ public class Aniversario {
     private OffsetDateTime dataUltimaAtualizacao;
 
     public Boolean fezAniversarioEsseAno() {
-        return dataAniversario.toLocalDate().isBefore(LocalDate.now());
+        LocalDate aniversarioEsseAno = LocalDate.of(
+                LocalDate.now().getYear(),
+                dataAniversario.getMonth(),
+                dataAniversario.getDayOfMonth()
+        );
+        return aniversarioEsseAno.isBefore(LocalDate.now());
     }
 }
