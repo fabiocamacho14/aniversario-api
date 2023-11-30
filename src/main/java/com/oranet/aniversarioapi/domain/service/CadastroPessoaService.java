@@ -1,16 +1,20 @@
 package com.oranet.aniversarioapi.domain.service;
 
+import com.oranet.aniversarioapi.domain.exception.FalecidoNaoEncontradoException;
 import com.oranet.aniversarioapi.domain.exception.NegocioException;
 import com.oranet.aniversarioapi.domain.exception.PessoaNaoEncontradaException;
 import com.oranet.aniversarioapi.domain.model.Aniversario;
+import com.oranet.aniversarioapi.domain.model.Falecido;
 import com.oranet.aniversarioapi.domain.model.GrupoSocial;
 import com.oranet.aniversarioapi.domain.model.Pessoa;
+import com.oranet.aniversarioapi.domain.repository.FalecidoRepository;
 import com.oranet.aniversarioapi.domain.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.Period;
 import java.util.HashSet;
 
@@ -19,6 +23,9 @@ public class CadastroPessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private FalecidoRepository falecidoRepository;
 
     @Autowired
     private CadastroGrupoSocialService cadastroGrupoSocialService;
@@ -100,6 +107,41 @@ public class CadastroPessoaService {
             throw new NegocioException(String.format("Pessoa de código %d não pertence ao grupo social de código %d",
                     pessoaId, grupoSocialId));
         }
+    }
+
+    @Transactional
+    public void adicionarFalecido(Long pessoaId) {
+        Pessoa pessoa = buscarOuFalhar(pessoaId);
+
+        if (pessoa.getIsFalecido()) {
+            throw new NegocioException(String.format("Pessoa de código %d já consta como falecida no sistema.",
+                    pessoaId));
+        }
+
+        pessoa.setIsFalecido(Boolean.TRUE);
+
+        Falecido falecido = new Falecido();
+        falecido.setPessoa(pessoa);
+        falecido.setIdadeQueFaleceu(pessoa.getIdade());
+        falecido.setDataFalecimento(OffsetDateTime.now());
+//        Provisório
+        Period period = Period.between(LocalDate.now(), LocalDate.now());
+        falecido.setPeriodoFalecimento(period);
+
+        falecidoRepository.save(falecido);
+    }
+
+    @Transactional
+    public void removerFalecido(Long pessoaId) {
+        Pessoa pessoa = buscarOuFalhar(pessoaId);
+
+        if (!pessoa.getIsFalecido()) {
+            throw new FalecidoNaoEncontradoException(String.format("Pessoa de código %d não consta como falecida no sistema.",
+                    pessoaId));
+        }
+
+        pessoa.setIsFalecido(Boolean.FALSE);
+        falecidoRepository.deleteByPessoaId(pessoaId);
     }
 
     public Pessoa buscarOuFalhar(Long pessoaId) {

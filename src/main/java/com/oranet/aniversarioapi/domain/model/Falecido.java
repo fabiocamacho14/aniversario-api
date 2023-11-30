@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.time.Period;
+import java.util.UUID;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -32,7 +33,7 @@ public class Falecido {
 
     //    Relacionamentos
     @MapsId
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToOne()
     @JoinColumn(name = "pessoa_id", nullable = false, unique = true, foreignKey =
     @ForeignKey(name = "FK_FALECIDO_PESSOA", foreignKeyDefinition = "FOREIGN KEY (pessoa_id) REFERENCES Pessoa(aniversario_id)"))
     private Pessoa pessoa;

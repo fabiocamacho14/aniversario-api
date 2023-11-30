@@ -11,3 +11,4 @@ alter table falecido auto_increment = 1;
 alter table aniversario auto_increment = 1;
 alter table pessoa auto_increment = 1;
 alter table grupo_social auto_increment = 1;
+

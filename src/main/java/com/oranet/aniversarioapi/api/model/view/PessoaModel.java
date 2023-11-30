@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 public class PessoaModel {
 
+    private Long id;
     private String nome;
     private String descricao;
     private Integer idade;
