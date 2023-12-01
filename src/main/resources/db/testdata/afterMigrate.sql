@@ -4,6 +4,7 @@ delete from falecido;
 delete from grupo_social;
 delete from pessoa;
 delete from aniversario;
+delete from pessoa_grupos_sociais;
 
 set foreign_key_checks = 1;
 

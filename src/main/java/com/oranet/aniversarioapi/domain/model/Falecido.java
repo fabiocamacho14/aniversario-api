@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.time.Period;
-import java.util.UUID;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter

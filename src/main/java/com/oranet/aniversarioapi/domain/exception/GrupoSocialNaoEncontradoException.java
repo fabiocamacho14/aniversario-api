@@ -7,6 +7,6 @@ public class GrupoSocialNaoEncontradoException extends EntidadeNaoEncontradaExce
     }
 
     public GrupoSocialNaoEncontradoException(Long grupoSocialId) {
-        super(String.format("Grupo social de id %d não foi encontrado.", grupoSocialId));
+        this(String.format("Grupo social de id %d não foi encontrado.", grupoSocialId));
     }
 }

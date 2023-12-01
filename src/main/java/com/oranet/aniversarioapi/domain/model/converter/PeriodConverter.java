@@ -14,25 +14,22 @@ public class PeriodConverter implements AttributeConverter<Period, String> {
         int months = attribute.getMonths();
         int days = attribute.getDays();
 
-        String periodString = String.format("%02d/%02d/%03d", days, months, years);
-
-        return periodString;
+        return String.format("%02d/%02d/%03d", days, months, years);
     }
 
     @Override
     public Period convertToEntityAttribute(String dbData) {
         String[] numbers = dbData.split("/");
-        Period period = Period.of(
-                Integer.parseInt(numbers[0]),
-                Integer.parseInt(numbers[1]),
-                Integer.parseInt(numbers[2])
-        );
 
 
 //        Period period = Period.of(
 //                Integer.
 //        )
 
-        return period;
+        return Period.of(
+                Integer.parseInt(numbers[0]),
+                Integer.parseInt(numbers[1]),
+                Integer.parseInt(numbers[2])
+        );
     }
 }

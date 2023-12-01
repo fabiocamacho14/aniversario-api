@@ -4,6 +4,7 @@ import com.oranet.aniversarioapi.api.assembler.PessoaModelAssembler;
 import com.oranet.aniversarioapi.api.assembler.disassembler.PessoaInputDisassembler;
 import com.oranet.aniversarioapi.api.model.input.PessoaInput;
 import com.oranet.aniversarioapi.api.model.view.PessoaModel;
+import com.oranet.aniversarioapi.api.model.view.PessoaResumoModel;
 import com.oranet.aniversarioapi.domain.model.Pessoa;
 import com.oranet.aniversarioapi.domain.repository.PessoaRepository;
 import com.oranet.aniversarioapi.domain.service.CadastroPessoaService;
@@ -36,8 +37,8 @@ public class PessoaController {
     }
 
     @GetMapping()
-    public List<PessoaModel> listar() {
-        return pessoaModelAssembler.toCollectionModel(pessoaRepository.findAll());
+    public List<PessoaResumoModel> listar() {
+        return pessoaModelAssembler.toCollectionResumeModel(pessoaRepository.findAll());
     }
 
     @PostMapping
@@ -52,4 +53,5 @@ public class PessoaController {
     public void remover(@PathVariable Long pessoaId) {
         cadastroPessoa.remover(pessoaId);
     }
+
 }

@@ -1,6 +1,7 @@
 package com.oranet.aniversarioapi.api.assembler;
 
 import com.oranet.aniversarioapi.api.model.view.PessoaModel;
+import com.oranet.aniversarioapi.api.model.view.PessoaResumoModel;
 import com.oranet.aniversarioapi.domain.model.Pessoa;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,13 @@ public class PessoaModelAssembler {
         return modelMapper.map(pessoa, PessoaModel.class);
     }
 
-    public List<PessoaModel> toCollectionModel(List<Pessoa> pessoas) {
+    public PessoaResumoModel toResumeModel(Pessoa pessoa) {
+        return modelMapper.map(pessoa, PessoaResumoModel.class);
+    }
+
+    public List<PessoaResumoModel> toCollectionResumeModel(List<Pessoa> pessoas) {
         return pessoas.stream()
-                .map(this::toModel)
+                .map(this::toResumeModel)
                 .toList();
     }
 }

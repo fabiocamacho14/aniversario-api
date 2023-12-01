@@ -1,6 +1,5 @@
 package com.oranet.aniversarioapi.domain.service;
 
-import com.oranet.aniversarioapi.domain.exception.FalecidoNaoEncontradoException;
 import com.oranet.aniversarioapi.domain.exception.NegocioException;
 import com.oranet.aniversarioapi.domain.exception.PessoaNaoEncontradaException;
 import com.oranet.aniversarioapi.domain.model.Aniversario;
@@ -17,6 +16,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class CadastroPessoaService {
@@ -81,7 +81,9 @@ public class CadastroPessoaService {
 
     @Transactional
     public void remover(Long pessoaId) {
-        buscarOuFalhar(pessoaId);
+        Pessoa pessoa = buscarOuFalhar(pessoaId);
+        Set<GrupoSocial> grupoSocialVazio = new HashSet<>();
+        pessoa.setGruposSociais(grupoSocialVazio);
 
         pessoaRepository.deleteById(pessoaId);
     }
@@ -136,7 +138,7 @@ public class CadastroPessoaService {
         Pessoa pessoa = buscarOuFalhar(pessoaId);
 
         if (!pessoa.getIsFalecido()) {
-            throw new FalecidoNaoEncontradoException(String.format("Pessoa de código %d não consta como falecida no sistema.",
+            throw new NegocioException(String.format("Pessoa de código %d não consta como falecida no sistema.",
                     pessoaId));
         }
 

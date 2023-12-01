@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/pessoa/{pessoaId}/falecimento")
+@RequestMapping("/pessoa/falecimento")
 @RestController
 public class FalecidoController {
 
@@ -18,23 +18,23 @@ public class FalecidoController {
     private CadastroPessoaService cadastroPessoaService;
 
     @Autowired
-    private FalecidoRepository falecidoRepository;
-
-    @Autowired
     private FalecidoModelAssembler falecidoModelAssembler;
 
-    @GetMapping
+    @Autowired
+    private FalecidoRepository falecidoRepository;
+
+    @GetMapping()
     public List<FalecidoModel> listar() {
         return falecidoModelAssembler.toCollectionModel(falecidoRepository.findAll());
     }
 
-    @PostMapping
+    @PostMapping("/{pessoaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void adicionarFalecido(@PathVariable Long pessoaId) {
         cadastroPessoaService.adicionarFalecido(pessoaId);
     }
 
-    @DeleteMapping
+    @DeleteMapping("{pessoaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerFalecido(@PathVariable Long pessoaId) {
         cadastroPessoaService.removerFalecido(pessoaId);

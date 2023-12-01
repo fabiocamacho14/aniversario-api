@@ -4,7 +4,6 @@ import com.oranet.aniversarioapi.api.assembler.GrupoSocialModelAssembler;
 import com.oranet.aniversarioapi.api.model.view.GrupoSocialModel;
 import com.oranet.aniversarioapi.domain.model.GrupoSocial;
 import com.oranet.aniversarioapi.domain.model.Pessoa;
-import com.oranet.aniversarioapi.domain.service.CadastroGrupoSocialService;
 import com.oranet.aniversarioapi.domain.service.CadastroPessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +17,6 @@ public class PessoaGrupoSocialController {
 
     @Autowired
     private CadastroPessoaService cadastroPessoaService;
-
-    @Autowired
-    private CadastroGrupoSocialService cadastroGrupoSocialService;
 
     @Autowired
     private GrupoSocialModelAssembler grupoSocialModelAssembler;

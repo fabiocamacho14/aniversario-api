@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@NamedNativeQuery(name = "selectPessoas", query = "select * from pessoa", resultClass = Pessoa.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
